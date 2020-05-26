@@ -54,3 +54,12 @@ export function newPost(post) {
         post,
     };
 }
+
+// export async function getMovieLikes(movieId) {
+//     const { data } = await axios.get("/api/movies/" + movieId);
+//     console.log("data in GETMOVIELIKES actions", data);
+//     return {
+//         type: "MOVIE",
+//         movie: data,
+//     };
+// }

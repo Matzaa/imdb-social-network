@@ -450,6 +450,37 @@ app.post("/endFriendship", (req, res) => {
         });
 });
 
+//================================= MOVIES =======================================
+
+// app.get("/api/movies/:movieId", (req, res) => {
+//     console.log("req param MOVIE", req.params);
+//     db.getMovieLikes(req.params.movieId)
+//         .then((results) => {
+//             console.log("getMovieLikes:", results.rows);
+//             res.json(results.rows);
+//         })
+//         .catch((err) => {
+//             console.log("err in getMovieLikes", err);
+//         });
+// });
+app.get("/api/movies/:movieId", (req, res) => {
+    console.log("req param MOVIE", req.params);
+    let movieInfo = {};
+    db.getMovieLikes(req.params.movieId)
+        .then((results) => {
+            console.log("getMovieLikes:", results.rows);
+            res.json(results.rows);
+        })
+        .catch((err) => {
+            console.log("err in getMovieLikes", err);
+        });
+});
+
+// app.get("movies/all", (req, res) => {
+//     db.getPopulars().then((results) => {
+//         console.log("results in GET POPS", results);
+//     });
+// });
 //===============================================================================
 
 app.get("/logout", (req, res) => {

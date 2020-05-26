@@ -266,3 +266,30 @@ module.exports.userInfoForWall = (userId) => {
         [userId]
     );
 };
+
+//----------------------- movies -------------------------------------
+module.exports.getMovieLikes = (movieId) => {
+    return db.query(
+        `
+        SELECT users.id, users.first, users.last, users.profile_pic
+        FROM users
+        JOIN movies 
+        ON (users.id = movies.user_id)
+        WHERE movie_id = $1;
+        `,
+        [movieId]
+    );
+};
+
+module.exports.getPopulars = () => {
+    return db.query(
+        `
+        SELECT movie_id,
+        COUNT(movie_id) AS value_occurrence 
+        FROM movies
+        GROUP BY movie_id
+        ORDER BY value_occurrence  DESC
+        LIMIT 3;
+        `
+    );
+};

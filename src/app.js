@@ -9,6 +9,8 @@ import FindPeople from "./find-people";
 import Friends from "./friends";
 import Navbar from "./navbar";
 import Chat from "./chat";
+import Movies from "./movies";
+import Movie from "./movie-search";
 
 export default class App extends React.Component {
     constructor() {
@@ -104,6 +106,18 @@ export default class App extends React.Component {
                             render={() => <Friends />}
                         />
                         <Route path="/chat" component={Chat} />
+                        <Route
+                            exact
+                            path="/movies/:movieId"
+                            render={(props) => (
+                                <Movies
+                                    key={props.match.url}
+                                    match={props.match}
+                                    history={props.history}
+                                />
+                            )}
+                        />
+                        <Route path="/movies" component={Movie} />
                     </div>
                 </BrowserRouter>
             </div>

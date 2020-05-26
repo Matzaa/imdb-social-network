@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS pm;
 
 CREATE TABLE pm(
     id SERIAL PRIMARY KEY,
-    message VARCHAR(255) NOT NULL,
+        message VARCHAR(255) NOT NULL,
     sender_id INT NOT NULL,
     receiver_id INT REFERENCES users(id) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
