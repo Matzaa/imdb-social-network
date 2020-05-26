@@ -293,3 +293,26 @@ module.exports.getPopulars = () => {
         `
     );
 };
+
+module.exports.getMovieWall = () => {
+    return db.query(
+        `
+        SELECT users.first, users.last, users.profile_pic, movie_wall.id, movie_wall.comment, movie_wall.created_at, movie_wall.commenter_id, movie_wall.movie_id
+        FROM users 
+        JOIN movie_wall
+        ON users.id = movie_wall.commenter_id
+        ORDER BY movie_wall.id DESC;
+        `
+    );
+};
+
+module.exports.addMovieComment = (comment, movieId, userId) => {
+    return db.query(
+        `
+        INSERT INTO movie_wall (comment, movie_id, commenter_id)
+        VALUES ($1, $2, $3)
+        RETURNING comment, commenter_id, movie_id, created_at;
+        `,
+        [comment, movieId, userId]
+    );
+};

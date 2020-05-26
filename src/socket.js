@@ -1,6 +1,13 @@
 import * as io from "socket.io-client";
 
-import { chatMessages, chatMessage, wall, newPost } from "./actions";
+import {
+    chatMessages,
+    chatMessage,
+    wall,
+    newPost,
+    movieWall,
+    newMoviePostOnWall,
+} from "./actions";
 
 export let socket;
 
@@ -30,6 +37,14 @@ export const init = (store) => {
 
         socket.on("newPost", (post) => {
             store.dispatch(newPost(post));
+        });
+
+        socket.on("movie wall posts", (moviePosts) => {
+            store.dispatch(movieWall(moviePosts));
+        });
+
+        socket.on("newMoviePost", (MoviePost) => {
+            store.dispatch(newMoviePostOnWall(MoviePost));
         });
     }
 };

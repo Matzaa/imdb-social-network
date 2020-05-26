@@ -55,6 +55,20 @@ export function newPost(post) {
     };
 }
 
+export function movieWall(moviePosts) {
+    return {
+        type: "MOVIE_WALL",
+        moviePosts,
+    };
+}
+
+export function newMoviePostOnWall(moviePost) {
+    console.log("new movie post in ACTION", moviePost);
+    return {
+        type: "NEW_MOVIE_POST",
+        moviePost,
+    };
+}
 // export async function getMovieLikes(movieId) {
 //     const { data } = await axios.get("/api/movies/" + movieId);
 //     console.log("data in GETMOVIELIKES actions", data);

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import axios from "./axios";
-// import useQueryString from "./queryString";
-// import Movie from "./movie-search";
+import MovieWall from "./movie-wall";
 
 export default class Movies extends React.Component {
     constructor(props) {
@@ -89,11 +86,11 @@ export default class Movies extends React.Component {
 
     render() {
         console.log("THIS STATE!", this.state);
+        console.log("THIS PROPS!", this.props);
         const { error, isLoaded, items } = this.state;
         return (
             <div id="movie">
                 {error && <div>Error: {error.message}</div>}
-                {/* {!isLoaded && <div>Loading...</div>} */}
                 {isLoaded && (
                     <div id="movie-container">
                         <Link to={"/movies/" + items.imdbID}>
@@ -105,18 +102,24 @@ export default class Movies extends React.Component {
                         {this.state.data &&
                             this.state.data.map((like) => (
                                 <div key={like.id}>
-                                    <img
-                                        src={like.profile_pic}
-                                        onError={(e) =>
-                                            (e.target.src = "/default.jpg")
-                                        }
-                                    />
+                                    <Link to={"/user/" + like.id}>
+                                        <img
+                                            src={like.profile_pic}
+                                            onError={(e) =>
+                                                (e.target.src = "/default.jpg")
+                                            }
+                                        />
 
-                                    <span>
-                                        {like.first} {like.last}
-                                    </span>
+                                        <span>
+                                            {like.first} {like.last}
+                                        </span>
+                                    </Link>
                                 </div>
                             ))}
+                        <MovieWall
+                            userId={this.props.userId}
+                            movieId={items.imdbID}
+                        />
                     </div>
                 )}
             </div>

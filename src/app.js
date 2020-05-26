@@ -114,6 +114,7 @@ export default class App extends React.Component {
                                     key={props.match.url}
                                     match={props.match}
                                     history={props.history}
+                                    userId={this.state.userId}
                                 />
                             )}
                         />

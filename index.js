@@ -553,6 +553,14 @@ io.on("connection", function (socket) {
             console.log("err in getWall", err);
         });
 
+    db.getMovieWall()
+        .then((results) => {
+            io.sockets.emit("movie wall posts", results.rows);
+        })
+        .catch((err) => {
+            console.log("err in get moviaewall", err);
+        });
+
     socket.on("My amazing chat message", (newMsg) => {
         // console.log("this message is coming from chat.js: ", newMsg);
         // console.log("user who sent new message ", userId);
@@ -608,6 +616,32 @@ io.on("connection", function (socket) {
             })
             .catch((err) => {
                 console.log("err in addPost", err);
+            });
+    });
+
+    socket.on("post to movie wall", (info) => {
+        console.log("info in POST TO MOVIE W", info);
+        db.addMovieComment(info.post, info.movieId, userId)
+            .then((moviePostInfo) => {
+                console.log("results in add movie comment", moviePostInfo);
+                db.userInfoForWall(userId)
+                    .then((results) => {
+                        let newMoviePost = {
+                            ...moviePostInfo.rows[0],
+                            ...results.rows[0],
+                        };
+                        console.log(
+                            "new Movie post before socket emit",
+                            newMoviePost
+                        );
+                        io.sockets.emit("newMoviePost", newMoviePost);
+                    })
+                    .catch((err) => {
+                        console.log("err in get userInfo forMoviePost", err);
+                    });
+            })
+            .catch((err) => {
+                console.log("err in addMoviePost", err);
             });
     });
 

@@ -59,12 +59,20 @@ export default function reducer(state = {}, action) {
         };
     }
 
-    // if (action.type === "MOVIE") {
-    //     state = {
-    //         ...state,
-    //         movie: action.movie,
-    //     };
-    // }
+    if (action.type === "MOVIE_WALL") {
+        state = {
+            ...state,
+            moviePosts: action.moviePosts,
+        };
+    }
+
+    if (action.type === "NEW_MOVIE_POST") {
+        state = {
+            ...state,
+            moviePosts: [action.moviePost, ...state.moviePosts],
+        };
+    }
+
     console.log("state in reducer", state);
 
     console.log("chatmessages in reduder", state.chatMessages);
