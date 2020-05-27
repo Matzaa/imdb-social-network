@@ -20,9 +20,8 @@ export default class App extends React.Component {
 
     componentDidMount() {
         console.log("App mounted");
-        console.log("this.state before get", this.state);
+        // console.log("this.state before get", this.state);
         axios.get("/user", this.state).then(({ data }) => {
-            console.log("data in get user", data);
             this.setState(data);
             console.log("this.state after get", this.state);
         });
@@ -58,7 +57,6 @@ export default class App extends React.Component {
                         <Route
                             exact
                             path="/"
-                            sur
                             render={() => (
                                 <Profile
                                     first={this.state.first}

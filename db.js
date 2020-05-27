@@ -316,3 +316,14 @@ module.exports.addMovieComment = (comment, movieId, userId) => {
         [comment, movieId, userId]
     );
 };
+
+module.exports.getFaveMovies = (userId) => {
+    return db.query(
+        `
+        SELECT movie_id 
+        FROM movies
+        WHERE user_id = $1
+        `,
+        [userId]
+    );
+};

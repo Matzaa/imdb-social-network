@@ -302,21 +302,34 @@ app.get("/api/user/:id", (req, res) => {
                             );
                         }
 
-                        db.getUserById(req.params.id)
+                        db.getFaveMovies(req.params.id)
                             .then((results) => {
-                                // console.log("results.rows[0]", results.rows[0]);
-                                res.json({
-                                    ...userFriends,
-                                    ...friendshipstatus,
-                                    usersOwnProfile: false,
-                                    first: results.rows[0].first,
-                                    last: results.rows[0].last,
-                                    imageUrl: results.rows[0].profile_pic,
-                                    bio: results.rows[0].bio,
-                                });
+                                console.log(
+                                    "results in getFAVE moovies",
+                                    results.rows
+                                );
+                                var faveMovies = { faves: results.rows };
+                                db.getUserById(req.params.id)
+                                    .then((results) => {
+                                        // console.log("results.rows[0]", results.rows[0]);
+                                        res.json({
+                                            ...faveMovies,
+                                            ...userFriends,
+                                            ...friendshipstatus,
+                                            usersOwnProfile: false,
+                                            first: results.rows[0].first,
+                                            last: results.rows[0].last,
+                                            imageUrl:
+                                                results.rows[0].profile_pic,
+                                            bio: results.rows[0].bio,
+                                        });
+                                    })
+                                    .catch((err) => {
+                                        console.log("err in getUserbyId", err);
+                                    });
                             })
                             .catch((err) => {
-                                console.log("err in getUserbyId", err);
+                                console.log("err in getFAVES", err);
                             });
                     })
                     .catch((err) => {
@@ -465,7 +478,6 @@ app.post("/endFriendship", (req, res) => {
 // });
 app.get("/api/movies/:movieId", (req, res) => {
     console.log("req param MOVIE", req.params);
-    let movieInfo = {};
     db.getMovieLikes(req.params.movieId)
         .then((results) => {
             console.log("getMovieLikes:", results.rows);
@@ -473,6 +485,19 @@ app.get("/api/movies/:movieId", (req, res) => {
         })
         .catch((err) => {
             console.log("err in getMovieLikes", err);
+        });
+});
+
+app.get("/faveMovies/:userId", (req, res) => {
+    console.log("req params in faveMovies", req.params);
+    db.getFaveMovies(req.params.userId)
+        .then((results) => {
+            console.log("results in getFAVE moovies", results.rows);
+            var faveMovies = { faves: results.rows };
+            res.json({ ...faveMovies });
+        })
+        .catch((err) => {
+            console.log("err in faveMovies", err);
         });
 });
 

@@ -57,6 +57,16 @@ export default class Movies extends React.Component {
             );
     }
 
+    like() {
+        axios
+            .post("/likeMovie", {
+                user: this.props.userId,
+                movie: this.props.match.params.movieId,
+            })
+            .then((data) => {
+                console.log("data in LIKE", data);
+            });
+    }
     // keyCheck = (e) => {
     //     if (e.key === "Enter") {
     //         e.preventDefault();
@@ -98,7 +108,9 @@ export default class Movies extends React.Component {
                         </Link>
                         <p>{items.Title}</p>
                         <p>This movie is liked by:</p>
-                        <button>add to my favorites</button>
+                        <button onClick={() => this.like()}>
+                            add to my favorites
+                        </button>
                         {this.state.data &&
                             this.state.data.map((like) => (
                                 <div key={like.id}>

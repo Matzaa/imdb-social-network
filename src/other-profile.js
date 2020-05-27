@@ -8,12 +8,17 @@ import { Link } from "react-router-dom";
 export default class OtherProfile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            posters: [],
+            error: null,
+            isLoaded: false,
+        };
     }
 
     componentDidMount() {
         console.log("this.state before axios", this.state);
-        console.log("this.props", this.state);
+
+        console.log("this.props", this.props);
         const otheruserId = this.props.match.params.id;
         axios.get("/api/user/" + otheruserId, this.state).then(({ data }) => {
             console.log("data in axios mount", data);
@@ -25,10 +30,36 @@ export default class OtherProfile extends React.Component {
                     "this.state after axios in OTHERPROFILE",
                     this.state
                 );
+                for (var i = 0; i < this.state.faves.length; i++) {
+                    console.log("MOVIE LOOP", this.state.faves[i].movie_id);
+                    fetch(
+                        `http://www.omdbapi.com/?i=${this.state.faves[i].movie_id}&apikey=27336ed8`
+                    )
+                        .then((res) => res.json())
+                        .then(
+                            (result) => {
+                                this.setState({
+                                    isLoaded: true,
+
+                                    posters: [...this.state.posters, result],
+                                });
+                                console.log("FETCH RESULT", result);
+                            },
+                            (error) => {
+                                this.setState({
+                                    isLoaded: true,
+                                    error,
+                                });
+                            }
+                        );
+                }
             }
         });
+        // console.log("POSTERS", posters);
     }
+
     render() {
+        console.log("AFTER ALL", this.state);
         return (
             <div id="otherprofile">
                 <h1>
@@ -47,6 +78,16 @@ export default class OtherProfile extends React.Component {
                         />
                     </div>
                 </div>
+                {this.state.faves && this.state.faves.length > 0 && (
+                    <div>
+                        <p>{this.state.first}'s favorite movies</p>
+                        {this.state.posters.map((poster) => (
+                            <div key={poster.imdbID}>
+                                <img src={poster.Poster} />
+                            </div>
+                        ))}
+                    </div>
+                )}
                 {this.state.friendship && (
                     <>
                         <div id="friends-of-friends">
