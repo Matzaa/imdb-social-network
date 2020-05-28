@@ -8,6 +8,14 @@ import ResetPassword from "./reset";
 export default function Welcome() {
     return (
         <div id="welcome">
+            <video
+                src="/moon.mp4"
+                loop
+                muted
+                autoPlay
+                poster="/still.png"
+            ></video>
+
             <HashRouter>
                 <div id="welcome-modal">
                     <div className="register-login">

@@ -73,8 +73,5 @@ export default function reducer(state = {}, action) {
         };
     }
 
-    console.log("state in reducer", state);
-
-    console.log("chatmessages in reduder", state.chatMessages);
     return state;
 }

@@ -327,3 +327,34 @@ module.exports.getFaveMovies = (userId) => {
         [userId]
     );
 };
+
+module.exports.likeMovie = (movieId, userId) => {
+    return db.query(
+        `
+        INSERT INTO movies (movie_id, user_id)
+        VALUES ($1, $2)
+        `,
+        [movieId, userId]
+    );
+};
+module.exports.removeMovie = (movieId, userId) => {
+    return db.query(
+        `
+       DELETE FROM movies
+        WHERE (movie_id = $1 AND user_id = $2)
+        
+        `,
+        [movieId, userId]
+    );
+};
+
+module.exports.getMovieRealtionship = (movieId, userId) => {
+    return db.query(
+        `
+        SELECT movie_id, user_id
+        FROM movies
+        WHERE (movie_id = $1 AND user_id = $2)
+        `,
+        [movieId, userId]
+    );
+};

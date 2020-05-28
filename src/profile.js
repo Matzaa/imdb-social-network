@@ -3,6 +3,7 @@ import Uploader from "./uploader";
 import BioEditor from "./bioeditor";
 import Wall from "./wall";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class Profile extends React.Component {
     constructor(props) {
@@ -14,7 +15,6 @@ export default class Profile extends React.Component {
             error: null,
             isLoaded: false,
         };
-        // this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +38,7 @@ export default class Profile extends React.Component {
                                 posters: [...this.state.posters, result],
                             });
                             console.log("FETCH RESULT", result);
+                            console.log("StaTE after FETCH", this.state);
                         },
                         (error) => {
                             this.setState({
@@ -51,9 +52,6 @@ export default class Profile extends React.Component {
     }
 
     toggleEditbio() {
-        console.log("this.state in profile.js", this.state);
-        console.log("this.props in profile.js", this.props);
-        console.log("toggling editbio");
         this.setState({
             editbioIsVisible: !this.state.editbioIsVisible,
         });
@@ -70,6 +68,7 @@ export default class Profile extends React.Component {
                 <div className="profile-element">
                     <div>
                         <img
+                            className="big-profile"
                             src={this.props.imageUrl}
                             onError={(e) => (e.target.src = "/default.jpg")}
                         />
@@ -79,6 +78,7 @@ export default class Profile extends React.Component {
                         {this.props.bio != null && (
                             <div>
                                 <h3>about me</h3>
+
                                 <p>{this.props.bio}</p>
                                 <button
                                     className="bio-btn"
@@ -119,7 +119,33 @@ export default class Profile extends React.Component {
                         toggleModal={() => this.toggleModal()}
                     />
                 )}
-                {this.props.userId && <div>{this.props.userId}!!!!!!!!!!</div>}
+
+                {this.state.faves && this.state.faves.length > 0 && (
+                    <div className="fave-container">
+                        <h4>My favorite movies</h4>
+                        <div className="populars">
+                            {this.state.posters.map((poster) => (
+                                <div key={poster.imdbID}>
+                                    <Link to={"/movies/" + poster.imdbID}>
+                                        <img
+                                            className="pop-posters"
+                                            src={poster.Poster}
+                                        />
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {this.state.faves && this.state.faves.length == 0 && (
+                    <div className="fave-container">
+                        <p>
+                            Looks like you haven't liked any movies yet! You can
+                            do it
+                            <Link to={"/movies"}> here!</Link>
+                        </p>
+                    </div>
+                )}
 
                 {<Wall userId={this.props.userId} />}
             </div>

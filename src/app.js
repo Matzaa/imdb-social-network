@@ -8,7 +8,6 @@ import OtherProfile from "./other-profile";
 import FindPeople from "./find-people";
 import Friends from "./friends";
 import Navbar from "./navbar";
-import Chat from "./chat";
 import Movies from "./movies";
 import Movie from "./movie-search";
 
@@ -23,7 +22,7 @@ export default class App extends React.Component {
         // console.log("this.state before get", this.state);
         axios.get("/user", this.state).then(({ data }) => {
             this.setState(data);
-            console.log("this.state after get", this.state);
+            // console.log("this.state after get", this.state);
         });
     }
 
@@ -41,10 +40,7 @@ export default class App extends React.Component {
                 <BrowserRouter>
                     <div id="app">
                         <div className="logo">
-                            <div id="logologo">
-                                <div id="logo-element"></div>
-                                <div id="logo-element-2"></div>
-                            </div>
+                            <i className="fas fa-film"></i>
                         </div>
 
                         <Profilepic
@@ -53,26 +49,29 @@ export default class App extends React.Component {
                             imageUrl={this.state.imageUrl}
                         />
                         <Navbar />
-
-                        <Route
-                            exact
-                            path="/"
-                            render={() => (
-                                <Profile
-                                    first={this.state.first}
-                                    last={this.state.last}
-                                    bio={this.state.bio}
-                                    imageUrl={this.state.imageUrl}
-                                    userId={this.state.userId}
-                                    onClick={this.showUploader}
-                                    applySubmittedBio={(arg) =>
-                                        this.applySubmittedBio(arg)
-                                    }
-                                    methodInApp={(arg) => this.methodInApp(arg)}
-                                    toggleModal={() => this.toggleModal()}
-                                />
-                            )}
-                        />
+                        {this.state.userId && (
+                            <Route
+                                exact
+                                path="/"
+                                render={() => (
+                                    <Profile
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        bio={this.state.bio}
+                                        imageUrl={this.state.imageUrl}
+                                        userId={this.state.userId}
+                                        onClick={this.showUploader}
+                                        applySubmittedBio={(arg) =>
+                                            this.applySubmittedBio(arg)
+                                        }
+                                        methodInApp={(arg) =>
+                                            this.methodInApp(arg)
+                                        }
+                                        toggleModal={() => this.toggleModal()}
+                                    />
+                                )}
+                            />
+                        )}
 
                         <Route
                             exact
@@ -103,7 +102,6 @@ export default class App extends React.Component {
                             path="/friends"
                             render={() => <Friends />}
                         />
-                        <Route path="/chat" component={Chat} />
                         <Route
                             exact
                             path="/movies/:movieId"

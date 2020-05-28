@@ -16,7 +16,6 @@ export const init = (store) => {
         socket = io.connect();
 
         socket.on("chatMessages", (msgs) => {
-            console.log("msgs in socket", msgs);
             store.dispatch(chatMessages(msgs));
         });
 
@@ -31,7 +30,6 @@ export const init = (store) => {
         });
 
         socket.on("posts", (posts) => {
-            console.log("posts in socket", posts);
             store.dispatch(wall(posts));
         });
 

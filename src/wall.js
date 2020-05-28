@@ -32,7 +32,7 @@ export default function Wall({ userId, otheruserId }) {
     // loadPage();
 
     return (
-        <div id="wall">
+        <div className="wall">
             <textarea
                 placeholder="post on my wall!"
                 onKeyDown={keyCheck}

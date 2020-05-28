@@ -7,7 +7,6 @@ export default function Navbar() {
             <Link to="/users">find friends</Link>
             <Link to="/friends">friends</Link>
             <Link to="/">profile</Link>
-            <Link to="/chat">chat</Link>
             <Link to="/movies">movies</Link>
             <a href="/logout">logout</a>
         </div>

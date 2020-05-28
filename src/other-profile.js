@@ -55,7 +55,6 @@ export default class OtherProfile extends React.Component {
                 }
             }
         });
-        // console.log("POSTERS", posters);
     }
 
     render() {
@@ -67,6 +66,7 @@ export default class OtherProfile extends React.Component {
                 </h1>
                 <div className="profile-element">
                     <img
+                        className="big-profile"
                         src={this.state.imageUrl}
                         onError={(e) => (e.target.src = "/default.jpg")}
                     />
@@ -79,40 +79,71 @@ export default class OtherProfile extends React.Component {
                     </div>
                 </div>
                 {this.state.faves && this.state.faves.length > 0 && (
-                    <div>
+                    <div className="fave-container">
                         <p>{this.state.first}'s favorite movies</p>
-                        {this.state.posters.map((poster) => (
-                            <div key={poster.imdbID}>
-                                <img src={poster.Poster} />
-                            </div>
-                        ))}
+                        <div className="populars">
+                            {this.state.posters.map((poster) => (
+                                <div key={poster.imdbID}>
+                                    <Link to={"/movies/" + poster.imdbID}>
+                                        <img
+                                            className="pop-posters"
+                                            src={poster.Poster}
+                                        />
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {this.state.faves && this.state.faves.length == 0 && (
+                    <div className="fave-container">
+                        <p>{this.state.first} hasn't liked any movies yet</p>
                     </div>
                 )}
                 {this.state.friendship && (
                     <>
-                        <div id="friends-of-friends">
+                        <div className="friends-of-friends">
                             <p>Friends of {this.state.first}</p>
-                            <div id="friends-of-friends-container">
+                            <div className="friends-of-friends-container">
                                 {this.state.friends.map((eachFriend) => (
                                     <div key={eachFriend.id} id="eachFriend">
-                                        <Link to={"/user/" + eachFriend.id}>
-                                            {eachFriend.profile_pic && (
-                                                <img
-                                                    src={eachFriend.profile_pic}
-                                                    onError={(e) =>
-                                                        (e.target.src =
-                                                            "/default.jpg")
-                                                    }
-                                                />
-                                            )}
-                                            {eachFriend.profile_pic == null && (
-                                                <img src="./default.jpg" />
-                                            )}
-                                            <div className="noDeco">
-                                                {eachFriend.first}{" "}
-                                                {eachFriend.last}
+                                        <div className="box">
+                                            <div className="boxes">
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
                                             </div>
-                                        </Link>
+                                            <Link to={"/user/" + eachFriend.id}>
+                                                {eachFriend.profile_pic && (
+                                                    <img
+                                                        src={
+                                                            eachFriend.profile_pic
+                                                        }
+                                                        onError={(e) =>
+                                                            (e.target.src =
+                                                                "/default.jpg")
+                                                        }
+                                                    />
+                                                )}
+                                                {eachFriend.profile_pic ==
+                                                    null && (
+                                                    <img src="./default.jpg" />
+                                                )}
+                                                <div className="noDeco">
+                                                    {eachFriend.first}{" "}
+                                                    {eachFriend.last}
+                                                </div>
+                                            </Link>
+                                            <div className="boxes">
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
+                                                <span className="small_box"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>

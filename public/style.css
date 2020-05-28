@@ -1,5 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&family=Limelight&display=swap");
+
 body {
-    background-color: rgb(225, 159, 137);
+    background-color: black;
+}
+
+/* =================== TEXT ================= */
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+span,
+::placeholder {
+    color: #fff;
+}
+
+h4 {
+    font-family: "Limelight", cursive;
+    letter-spacing: 3px;
+    font-size: 21px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-family: "Limelight", cursive;
+    letter-spacing: 20px;
+    font-size: 40px;
+    margin: 0px 0px 40px 0px;
+}
+
+h3 {
+    font-family: "Open Sans", sans-serif;
+    font-size: 15px;
+    margin: 0px;
+}
+
+p {
+    font-family: "Open Sans", sans-serif;
+    letter-spacing: 3px;
+    font-size: 20px;
+    margin: 15px 0px;
+}
+/* =================== VIDEO BACKGROUND ================= */
+
+video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 140%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    transform: translate(-50%, -50%);
 }
 
 /* =================== LOGIN, REGISTRATION ================= */
@@ -24,22 +79,19 @@ body {
     justify-items: center;
     align-items: center;
     flex-direction: column;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Josefin Sans", sans-serif;
     padding: 110px 35px;
     margin: 110px 0px;
-    background-color: rgb(167, 162, 169);
-    border: 1px solid rgb(167, 162, 169);
-    border-radius: 13px;
-    box-shadow: 5px 0px 23px 27px rgb(167, 162, 169);
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 30px;
+    box-shadow: 5px 0px 23px 27px rgba(0, 0, 0, 0.6);
 }
 
 #welcome-modal h3 {
-    color: rgb(90, 97, 90);
-    background-color: rgb(167, 162, 169);
-    font-family: "Amatic SC", cursive;
+    font-family: "Limelight", cursive;
     margin: 1px 0px 25px 0px;
     font-size: 36px;
-    letter-spacing: 10px;
+    letter-spacing: 1px;
     text-decoration: none;
 }
 
@@ -54,7 +106,7 @@ body {
 #app {
     display: grid;
     min-height: 100vh;
-    grid-template-columns: 1fr 650px 1fr;
+    grid-template-columns: 1fr 4fr 1.5fr;
     grid-template-rows: 210px auto;
 }
 
@@ -62,7 +114,6 @@ body {
     margin-top: 60px;
 }
 #forgot a {
-    color: rgb(90, 97, 90);
     letter-spacing: 8.5px;
 }
 
@@ -72,7 +123,7 @@ body {
     width: 358px;
 }
 .reset-text {
-    color: rgb(90, 90, 90);
+    color: black;
     font-size: 18px;
     letter-spacing: 6.5px;
 }
@@ -101,14 +152,15 @@ body {
 }
 
 #navbar a:hover {
-    box-shadow: 5px 0px 23px 27px rgb(167, 162, 169);
-    background-color: rgb(167, 162, 169);
-    border-radius: 13px;
-    color: rgb(90, 90, 90);
+    border: 3px dotted rgb(223, 208, 8);
 }
 
 #navbar a {
+    font-family: "Limelight", cursive;
+    border-radius: 15px;
+    padding: 5px 10px;
     margin: 10px;
+    border: 3px transparent solid;
 }
 
 /* ========================== PROFILE ===================== */
@@ -125,20 +177,17 @@ body {
     grid-column: 2/3;
     display: flex;
     flex-direction: column;
-    justify-items: center;
-    align-items: center;
 }
 
-#otherprofile img,
-#profile img {
+.big-profile {
     width: 300px;
     height: auto;
     object-fit: cover;
     border-radius: 15px;
 }
 
-#otherprofile h1 {
-    font-family: "Montserrat", sans-serif;
+h1 {
+    font-family: "Limelight", cursive;
     letter-spacing: 20px;
     font-size: 40px;
     margin: 0px 0px 80px 0px;
@@ -148,7 +197,6 @@ h3 {
     font-family: "Open Sans", sans-serif;
     font-size: 15px;
     margin: 0px;
-    color: rgb(90, 90, 90);
 }
 
 p {
@@ -160,14 +208,9 @@ p {
 
 .profile-element {
     display: flex;
-    border-radius: 13px;
-    border: 1px solid rgb(167, 162, 169);
     padding: 20px;
-    width: 640px;
-    background-color: rgb(167, 162, 169);
-    border: 1px solid rgb(167, 162, 169);
-    border-radius: 13px;
-    box-shadow: 5px 0px 23px 27px rgb(167, 162, 169);
+    border-left: 10px dashed white;
+    border-right: 10px dashed white;
 }
 
 .upload {
@@ -210,7 +253,7 @@ p {
     grid-column: 2/ 4;
     display: flex;
     position: absolute;
-    right: 15px;
+    right: 10%;
     align-items: center;
     justify-content: center;
     margin: 55px 4%;
@@ -220,8 +263,9 @@ p {
     width: 80px;
     height: 80px;
     object-fit: cover;
-
-    border-radius: 50%;
+    border-left: 5px dashed white;
+    border-right: dashed 5px white;
+    padding: 10px;
 }
 
 #profilepic h2 {
@@ -231,11 +275,6 @@ p {
     letter-spacing: 8px;
     color: white;
     margin-right: 10px;
-}
-
-#profile img {
-    width: 300px;
-    height: auto;
 }
 
 #recently-joined {
@@ -279,7 +318,7 @@ p {
 
 .noDeco {
     text-decoration: none;
-    color: black;
+    color: white;
 }
 
 a {
@@ -294,13 +333,17 @@ a {
 button {
     margin: 10px 0px 0px 0px;
     padding: 10px;
+    background-color: transparent;
+    font-family: "Limelight", cursive;
+    font-size: 20px;
+    color: white;
     border-radius: 15px;
-    background-color: rgb(167, 162, 169);
-    color: rgb(90, 90, 90);
+    border: 3px dotted rgba(223, 208, 8, 0.3);
 }
 
 button:hover {
-    background-color: rgb(225, 159, 137);
+    border-radius: 15px;
+    border: 3px dotted rgb(223, 208, 8);
     cursor: pointer;
 }
 
@@ -313,6 +356,7 @@ input {
     border-bottom: 1px dotted white;
     font-family: "Open Sans", sans-serif;
     margin-bottom: 5px;
+    color: black;
 }
 
 input,
@@ -326,8 +370,6 @@ textarea {
 textarea {
     width: 320px;
     height: 300px;
-    color: black;
-    background-color: rgb(180, 180, 190);
 }
 /* ========================= FRIENDS ==================================== */
 
@@ -364,40 +406,43 @@ textarea {
     font-size: 15px;
     font-family: "Open Sans", sans-serif;
     margin-bottom: 0px;
+    color: white;
 }
 
-#friends-of-friends {
-    width: 600px;
-    padding: 0px 40px;
-    background-color: rgb(167, 162, 169);
-    border: 1px solid rgb(167, 162, 169);
-    border-radius: 13px;
-    box-shadow: 5px 0px 23px 27px rgb(167, 162, 169);
-    margin-top: 102px;
+.friends-of-friends {
+    margin-top: 70px;
+    overflow: hidden;
+    overflow-x: scroll;
 }
 
-#friends-of-friends img {
-    width: 70px;
-    height: 70px;
+.friends-of-friends img {
+    width: 90%;
+    height: 100px;
     object-fit: cover;
+    margin: auto;
+    transition: opacity 0.2s linear;
+    transition: transform 0.3s linear;
+    animation: load 1s linear;
 }
 
-#friends-of-friends .noDeco {
+.friends-of-friends img:hover {
+    transform: scale(0.95);
+    opacity: 0.75;
+}
+
+.friends-of-friends .noDeco {
     font-size: 10px;
     font-family: "Open Sans", sans-serif;
 }
 
-#friends-of-friends p {
+.friends-of-friends p {
     margin-bottom: 10px;
 }
 
-#friends-of-friends-container {
+.friends-of-friends-container {
     display: flex;
 }
 
-#eachFriend {
-    margin-right: 10px;
-}
 /* ========================= UPLOADER ==================================== */
 .uploader-box {
     grid-row: 2;
@@ -429,8 +474,7 @@ textarea {
 }
 
 .uploader h1 {
-    color: rgb(90, 90, 90);
-    font-family: "Amatic SC", cursive;
+    font-family: "Limelight", cursive;
 }
 
 .uploader input {
@@ -537,39 +581,7 @@ textarea {
     border: none;
     object-fit: cover;
 }
-/* ========================= WALL ==================================== */
-#wall img {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin: 7px 7px 7px 0px;
-    border: none;
-    object-fit: cover;
-}
 
-#wall {
-    margin: 100px 0px;
-    padding: 20px;
-    width: 600px;
-    padding: 40px;
-    background-color: rgb(167, 162, 169);
-    border: 1px solid rgb(167, 162, 169);
-    border-radius: 13px;
-    box-shadow: 5px 0px 23px 27px rgb(167, 162, 169);
-}
-
-#wall textarea {
-    width: 595px;
-    height: 41px;
-    margin-bottom: 30px;
-}
-
-.individual-post {
-    display: flex;
-}
-
-.post-element {
-}
 /* ========================= PRIVATE CHAT ==================================== */
 #private-chat {
     grid-row: 2;
@@ -600,8 +612,82 @@ span {
     right: 0px;
     bottom: 1px;
 }
+/* ========================= WALL ==================================== */
+.wall img {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    margin: 7px 7px 7px 0px;
+    border: none;
+    object-fit: cover;
+}
+
+.wall {
+    margin: 100px 0px;
+    padding: 20px;
+    border-left: 10px dashed white;
+    border-right: 10px dashed white;
+}
+
+.wall textarea {
+    width: 595px;
+    height: 41px;
+    margin-bottom: 30px;
+    background-color: black;
+}
+
+.individual-post {
+    display: flex;
+}
 
 /* ========================= MOVIES ==================================== */
+#movie-search {
+    grid-row: 2;
+    grid-column: 2/4;
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+#movie-search .populars {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+}
+#movie-search .pop-posters {
+    width: 150px;
+    height: auto;
+    margin: 0px 0px 35px 0px;
+}
+
+#search {
+    grid-column: 1/2;
+    position: absolute;
+}
+.popular-container {
+    grid-column: 3;
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
+.popular-container-2 {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.fave-container {
+    margin-top: 70px;
+    overflow: hidden;
+    overflow-x: scroll;
+}
+
+.populars {
+    display: flex;
+}
+i {
+    font-size: 100px;
+    color: #fff;
+}
 #movie {
     grid-row: 2;
     grid-column: 2/3;
@@ -616,12 +702,74 @@ span {
     margin-top: 100px;
 }
 
-#movie-container img {
-    width: 300px;
-    height: auto;
+.pop-posters {
+    width: 90px;
+    height: 120px;
+    margin-right: 20px;
 }
 
-#movie-search {
-    grid-row: 2;
-    grid-column: 2/3;
+#likies {
+    display: flex;
 }
+
+#likies img {
+    width: 90%;
+    height: 100px;
+    object-fit: cover;
+    margin: auto;
+    transition: opacity 0.2s linear;
+    transition: transform 0.3s linear;
+    animation: load 1s linear;
+}
+
+.box {
+    width: 125px;
+    height: 100%;
+    display: inline-block;
+    margin: auto;
+    overflow: hidden;
+}
+.boxes {
+    width: 100%;
+    height: 25px;
+}
+.small_box {
+    margin: 0;
+    background-color: #fff;
+    display: inline-block;
+    width: 14px;
+    height: 10px;
+    margin: 5px 5px 5px 5.4px;
+}
+/* .center_box {
+    width: 90%;
+    height: 170px;
+    background: url(http://www.porathcontractors.com/gallery/albums/projects/Sunset.sized.jpg)
+        center center no-repeat;
+    margin: auto;
+    cursor: pointer;
+    transition: opacity 0.2s linear;
+    transition: transform 0.3s linear;
+    animation: load 1s linear;
+}
+
+.white-boxes {
+    grid-column: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.white-boxes-2 {
+    grid-column: 3/4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.white-box {
+    background-color: #fff;
+    width: 26px;
+    height: 26px;
+    margin: 10.81px 10px;
+} */

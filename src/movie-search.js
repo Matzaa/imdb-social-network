@@ -1,35 +1,54 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMovieLikes } from "./actions";
+import React from "react";
 import { Link } from "react-router-dom";
 import axios from "./axios";
-import Movies from "./movies";
 
-// export default function Movie() {
 export default class Movie extends React.Component {
-    // const dispatch = useDispatch();
-    // console.log("state in MOVIE JS", state);
     constructor(props) {
         super(props);
         this.state = {
             error: null,
             isLoaded: false,
             items: [],
+            populars: [],
+            posters: [],
         };
         this.keyCheck = this.keyCheck.bind(this);
     }
 
     componentDidMount() {
-        console.log("movie-search mounted", this.state);
+        console.log("movie-search mounted PROPS", this.props);
+        axios
+            .get("/populars")
+            .then(({ data }) => {
+                console.log("data in most popular movies", data);
+                for (var i = 0; i < data.populars.length; i++) {
+                    // console.log("MOVIE LOOP", data.populars[i].movie_id);
+                    fetch(
+                        `http://www.omdbapi.com/?i=${data.populars[i].movie_id}&apikey=27336ed8`
+                    )
+                        .then((res) => res.json())
+                        .then(
+                            (result) => {
+                                this.setState({
+                                    isLoaded: true,
+
+                                    posters: [...this.state.posters, result],
+                                });
+                                // console.log("FETCH RESULT", result);
+                            },
+                            (error) => {
+                                this.setState({
+                                    isLoaded: true,
+                                    error,
+                                });
+                            }
+                        );
+                }
+            })
+            .catch((err) => {
+                console.log("err in getpops", err);
+            });
     }
-    // useEffect(() => {
-    //     console.log("search movie mounted");
-    // axios.get("/movies/all").then(({ data }) => {
-    //     console.log("data in most popular movies");
-    //     setPopulars(data);
-    // });
-    // dispatch(getMovieLikes(result.imdbID));
-    // }, []);
 
     keyCheck(e) {
         if (e.key === "Enter") {
@@ -41,13 +60,11 @@ export default class Movie extends React.Component {
                 .then(
                     (result) => {
                         console.log("result in MOVIES", result);
-                        // setIsLoaded(true);
-                        // setItems(result);
-                        // onSetValue(result.imdbID);
                         this.setState({
                             isLoaded: true,
                             items: result,
                         });
+                        this.setState({ showPops: false });
                         this.props.history.push("/movies/" + result.imdbID);
                     },
                     (error) => {
@@ -65,19 +82,37 @@ export default class Movie extends React.Component {
         const { error, isLoaded, items } = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
-            // } else if (!isLoaded) {
-            //     return <div>Loading...</div>;
         } else {
             return (
                 <div id="movie-search">
-                    <input onKeyDown={this.keyCheck} />
-                    {/* <Movies /> */}
-                    {/* <div id="movie-container">
-                        <Link to={"/movies/" + items.imdbID}>
-                            <img src={items.Poster} />
-                            <p>{items.Title}</p>
-                        </Link>
-                    </div> */}
+                    <div className="popular-container">
+                        {this.state.populars && (
+                            <div className="popular-container-2">
+                                <p>popular picks</p>
+                                <div className="populars">
+                                    {this.state.posters.map((poster) => (
+                                        <div key={poster.imdbID}>
+                                            <Link
+                                                to={"/movies/" + poster.imdbID}
+                                            >
+                                                <img
+                                                    className="pop-posters"
+                                                    src={poster.Poster}
+                                                />
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div id="search">
+                        <input
+                            onKeyDown={this.keyCheck}
+                            placeholder="search for a movie"
+                        />
+                    </div>
                 </div>
             );
         }

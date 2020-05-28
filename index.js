@@ -37,7 +37,19 @@ const uploader = multer({
         fileSize: 2097152,
     },
 });
-
+//-------Date fixer ------------
+const prettierDate = (posttime) => {
+    return (posttime = new Intl.DateTimeFormat("en-GB", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false,
+        timeZone: "Etc/GMT",
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    }).format(posttime));
+};
 //-------------------------- SOCKET boilerplate ------------------------------
 
 // app.get("/", function (req, res) {
@@ -501,11 +513,49 @@ app.get("/faveMovies/:userId", (req, res) => {
         });
 });
 
-// app.get("movies/all", (req, res) => {
-//     db.getPopulars().then((results) => {
-//         console.log("results in GET POPS", results);
-//     });
-// });
+app.get("/movieRelationship/:userId/:movieId", (req, res) => {
+    db.getMovieRealtionship(req.params.movieId, req.params.userId)
+        .then((results) => {
+            console.log("results in getMovieRELATIONSHIP", results);
+            if (results.rowCount == 0) {
+                res.json({ buttonText: "add to favorites" });
+            } else {
+                res.json({ buttonText: "remove from favorites" });
+            }
+        })
+        .catch((err) => {
+            console.log("err in getMovieRelationship", err);
+        });
+});
+
+app.post("/like", (req, res) => {
+    console.log("req body in LIKE", req.body);
+    if (req.body.buttonText == "add to favorites") {
+        db.likeMovie(req.body.movieId, req.body.userId)
+            .then(() => {
+                res.json({ buttonText: "remove from favorites" });
+            })
+            .catch((err) => {
+                console.log("err in likeMovie", err);
+            });
+    } else if (req.body.buttonText == "remove from favorites") {
+        db.removeMovie(req.body.movieId, req.body.userId)
+            .then(() => {
+                res.json({ buttonText: "add to favorites" });
+            })
+            .catch((err) => {
+                console.log("err in remove movie", err);
+            });
+    }
+});
+app.get("/populars", (req, res) => {
+    console.log("POP MOVS HIT");
+    db.getPopulars().then((results) => {
+        console.log("results in GET POPS", results.rows);
+        res.json({ populars: results.rows });
+    });
+});
+
 //===============================================================================
 
 app.get("/logout", (req, res) => {
@@ -562,7 +612,12 @@ io.on("connection", function (socket) {
 
     db.getLastTenMessages()
         .then((results) => {
-            // console.log("results in getlast10", results.rows);
+            console.log("results in getlast10", results.rows);
+            for (let i = 0; i < results.rows.length; i++) {
+                results.rows[i].created_at = prettierDate(
+                    results.rows[i].created_at
+                );
+            }
             io.sockets.emit("chatMessages", results.rows.reverse());
         })
         .catch((err) => {
@@ -571,6 +626,11 @@ io.on("connection", function (socket) {
 
     db.getWall()
         .then((results) => {
+            for (let i = 0; i < results.rows.length; i++) {
+                results.rows[i].created_at = prettierDate(
+                    results.rows[i].created_at
+                );
+            }
             // console.log("results.rows in getWall", results.rows);
             io.sockets.emit("posts", results.rows);
         })
@@ -580,6 +640,11 @@ io.on("connection", function (socket) {
 
     db.getMovieWall()
         .then((results) => {
+            for (let i = 0; i < results.rows.length; i++) {
+                results.rows[i].created_at = prettierDate(
+                    results.rows[i].created_at
+                );
+            }
             io.sockets.emit("movie wall posts", results.rows);
         })
         .catch((err) => {
@@ -593,7 +658,11 @@ io.on("connection", function (socket) {
         db.addChat(newMsg, userId)
             .then((addChatResults) => {
                 // console.log("results from addchat: ", addChatResults.rows[0]);
-
+                for (let i = 0; i < addChatResults.rows.length; i++) {
+                    addChatResults.rows[i].created_at = prettierDate(
+                        addChatResults.rows[i].created_at
+                    );
+                }
                 db.getLastChatter(userId)
                     .then((results) => {
                         console.log(
@@ -626,6 +695,11 @@ io.on("connection", function (socket) {
         }
         db.addPost(info.post, wallOwner, userId)
             .then((postInfoFromWall) => {
+                for (let i = 0; i < postInfoFromWall.rows.length; i++) {
+                    postInfoFromWall.rows[i].created_at = prettierDate(
+                        postInfoFromWall.rows[i].created_at
+                    );
+                }
                 // console.log("results.rows aADD POST", postInfoFromWall.rows);
                 db.userInfoForWall(userId)
                     .then((results) => {
@@ -649,6 +723,11 @@ io.on("connection", function (socket) {
         db.addMovieComment(info.post, info.movieId, userId)
             .then((moviePostInfo) => {
                 console.log("results in add movie comment", moviePostInfo);
+                for (let i = 0; i < moviePostInfo.rows.length; i++) {
+                    moviePostInfo.rows[i].created_at = prettierDate(
+                        moviePostInfo.rows[i].created_at
+                    );
+                }
                 db.userInfoForWall(userId)
                     .then((results) => {
                         let newMoviePost = {

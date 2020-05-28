@@ -2,34 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "./axios";
 import MovieWall from "./movie-wall";
+import MovieButton from "./movie-button";
 
 export default class Movies extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: null,
-            isLoaded: false,
-            items: [],
+            movieerror: null,
+            movieisLoaded: false,
+            movieitems: [],
+            showPops: false,
         };
     }
-
-    // const dispatch = useDispatch();
-    // const movie = useSelector((state) => state && state.movie);
-    // const [error, setError] = useState(null);
-    // const [isLoaded, setIsLoaded] = useState(false);
-    // const [items, setItems] = useState([]);
-    // const [populars, setPopulars] = useState([]);
-    // const [value, onSetValue] = useQueryString("");
-
-    // useEffect(() => {
-    //     console.log("movies mounted");
-    //     axios.get("/movies/all").then(({ data }) => {
-    //         console.log("data in most popular movies");
-    //         setPopulars(data);
-    //     });
-    // }, []);
-
-    // console.log("history", this.props.history);
 
     componentDidMount() {
         console.log("movies mounted");
@@ -39,8 +23,8 @@ export default class Movies extends React.Component {
             .then(
                 (result) => {
                     this.setState({
-                        isLoaded: true,
-                        items: result,
+                        movieisLoaded: true,
+                        movieitems: result,
                     });
                     axios.get("/api/movies/" + movieId).then((data) => {
                         console.log("data in GET MOVIE", data);
@@ -50,87 +34,92 @@ export default class Movies extends React.Component {
 
                 (error) => {
                     this.setState({
-                        isLoaded: true,
-                        error,
+                        movieisLoaded: true,
+                        movieerror,
                     });
                 }
             );
     }
 
-    like() {
-        axios
-            .post("/likeMovie", {
-                user: this.props.userId,
-                movie: this.props.match.params.movieId,
-            })
-            .then((data) => {
-                console.log("data in LIKE", data);
-            });
-    }
-    // keyCheck = (e) => {
-    //     if (e.key === "Enter") {
-    //         e.preventDefault();
-    //         console.log("value ", e.target.value);
-    //         fetch(`http://www.omdbapi.com/?t=${e.target.value}&apikey=27336ed8`)
-    //             .then((res) => res.json())
-    //             .then(
-    //                 (result) => {
-    //                     console.log("result in MOVIES", result);
-    //                     // setIsLoaded(true);
-    //                     // setItems(result);
-    //                     // onSetValue(result.imdbID);
-    //                     this.setState({
-    //                         isLoaded: true,
-    //                         items: result,
-    //                     });
-    //                 },
-    //                 (error) => {
-    //                     this.setState({
-    //                         isLoaded: true,
-    //                         error,
-    //                     });
-    //                 }
-    //             );
-    //     }
-    // };
-
     render() {
         console.log("THIS STATE!", this.state);
         console.log("THIS PROPS!", this.props);
-        const { error, isLoaded, items } = this.state;
+        const { movieerror, movieisLoaded, movieitems } = this.state;
         return (
             <div id="movie">
-                {error && <div>Error: {error.message}</div>}
-                {isLoaded && (
+                {movieerror && <div>Error: {movieerror.message}</div>}
+                {movieisLoaded && (
                     <div id="movie-container">
-                        <Link to={"/movies/" + items.imdbID}>
-                            <img src={items.Poster} />
-                        </Link>
-                        <p>{items.Title}</p>
-                        <p>This movie is liked by:</p>
-                        <button onClick={() => this.like()}>
-                            add to my favorites
-                        </button>
-                        {this.state.data &&
-                            this.state.data.map((like) => (
-                                <div key={like.id}>
-                                    <Link to={"/user/" + like.id}>
-                                        <img
-                                            src={like.profile_pic}
-                                            onError={(e) =>
-                                                (e.target.src = "/default.jpg")
-                                            }
-                                        />
+                        <div>
+                            <h1>{movieitems.Title}</h1>
+                            <img src={movieitems.Poster} />
+                            <p>{movieitems.Plot}</p>
+                            <p>directed by: {movieitems.Director} </p>
+                            <p>starring {movieitems.Actors}</p>
+                            <p>
+                                {movieitems.Year}, {movieitems.Country}
+                            </p>
+                        </div>
 
-                                        <span>
-                                            {like.first} {like.last}
-                                        </span>
-                                    </Link>
+                        {this.state.data == 0 && (
+                            <div>
+                                <p>Be the first to like this movie!</p>
+                            </div>
+                        )}
+                        <MovieButton
+                            userId={this.props.userId}
+                            movieId={this.props.match.params.movieId}
+                        />
+                        <div id="likies">
+                            {this.state.data && this.state.data.length > 0 && (
+                                <div className="friends-of-friends">
+                                    <p>This movie is liked by:</p>
+                                    <div className="friends-of-friends-container">
+                                        {this.state.data.map((like) => (
+                                            <div key={like.id}>
+                                                <div className="box">
+                                                    <div className="boxes">
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                    </div>
+                                                    <Link
+                                                        to={"/user/" + like.id}
+                                                    >
+                                                        <img
+                                                            src={
+                                                                like.profile_pic
+                                                            }
+                                                            onError={(e) =>
+                                                                (e.target.src =
+                                                                    "/default.jpg")
+                                                            }
+                                                        />
+
+                                                        <div className="noDeco">
+                                                            {like.first}{" "}
+                                                            {like.last}
+                                                        </div>
+                                                    </Link>
+                                                    <div className="boxes">
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                        <span className="small_box"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            ))}
+                            )}
+                        </div>
                         <MovieWall
                             userId={this.props.userId}
-                            movieId={items.imdbID}
+                            movieId={movieitems.imdbID}
                         />
                     </div>
                 )}

@@ -3,7 +3,7 @@ import React from "react";
 export default function Profilepic({ first, imageUrl }) {
     imageUrl = imageUrl || "/default.jpg";
     var hours = new Date().getHours();
-    console.log("hours: ", hours);
+
     return (
         <div id="profilepic">
             <h2>
