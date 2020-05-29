@@ -477,17 +477,6 @@ app.post("/endFriendship", (req, res) => {
 
 //================================= MOVIES =======================================
 
-// app.get("/api/movies/:movieId", (req, res) => {
-//     console.log("req param MOVIE", req.params);
-//     db.getMovieLikes(req.params.movieId)
-//         .then((results) => {
-//             console.log("getMovieLikes:", results.rows);
-//             res.json(results.rows);
-//         })
-//         .catch((err) => {
-//             console.log("err in getMovieLikes", err);
-//         });
-// });
 app.get("/api/movies/:movieId", (req, res) => {
     console.log("req param MOVIE", req.params);
     db.getMovieLikes(req.params.movieId)
@@ -577,9 +566,13 @@ server.listen(8080, function () {
 });
 
 // ================== SOCKET =============================
+let onlineUsers = {
+    // [userId]: socketId,
+};
 
 io.on("connection", function (socket) {
     console.log(`socket with id ${socket.id} is now connected`);
+
     //if user isnt logged in, disconnect them from sockets
     if (!socket.request.session.userId) {
         return socket.disconnect(true);
@@ -595,9 +588,7 @@ io.on("connection", function (socket) {
 
     // //OR
 
-    // let onlineUsers = {
-    //     [userId]: socketId,
-    // };
+    console.log("ONLINE USERS", onlineUsers);
     // function getUsersById(arrayOfIds) {
     //     const query = `
     //     SELECT id, first, last, pic
@@ -612,7 +603,7 @@ io.on("connection", function (socket) {
 
     db.getLastTenMessages()
         .then((results) => {
-            console.log("results in getlast10", results.rows);
+            // console.log("results in getlast10", results.rows);
             for (let i = 0; i < results.rows.length; i++) {
                 results.rows[i].created_at = prettierDate(
                     results.rows[i].created_at

@@ -18,6 +18,11 @@ export default function Welcome() {
 
             <HashRouter>
                 <div id="welcome-modal">
+                    <div id="welcome-text">
+                        <h1>FilmBook</h1>
+                        <p>A place to connect with fellow cinephiles</p>
+                    </div>
+                    <i className="fas fa-film"></i>
                     <div className="register-login">
                         <Link to="/">
                             <h3>Register</h3>

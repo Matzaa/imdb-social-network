@@ -65,6 +65,7 @@ export default class Movie extends React.Component {
                             items: result,
                         });
                         this.setState({ showPops: false });
+                        console.log("THIS HISTORY", this.props.history);
                         this.props.history.push("/movies/" + result.imdbID);
                     },
                     (error) => {
@@ -107,7 +108,7 @@ export default class Movie extends React.Component {
                         )}
                     </div>
 
-                    <div id="search">
+                    <div>
                         <input
                             onKeyDown={this.keyCheck}
                             placeholder="search for a movie"
