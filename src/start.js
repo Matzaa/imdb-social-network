@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 
 import Welcome from "./welcome";
 import App from "./app";
-// import Hello from "./hello";
-// import * as io from "socket.io";
 import { init } from "./socket"; //giving socket.js file access to redux
 // =======================  redux stuff =============================
 import { createStore, applyMiddleware } from "redux";
@@ -32,8 +30,6 @@ const userIsLoggedIn = location.pathname != "/welcome";
 
 console.log("startpage");
 if (userIsLoggedIn) {
-    // elem = <App />;
-    // elem = <Hello />;
     init(store);
     elem = (
         <Provider store={store}>
