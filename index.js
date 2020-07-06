@@ -37,6 +37,7 @@ const uploader = multer({
         fileSize: 2097152,
     },
 });
+
 //-------Date fixer ------------
 const prettierDate = (posttime) => {
     return (posttime = new Intl.DateTimeFormat("en-GB", {
@@ -50,29 +51,6 @@ const prettierDate = (posttime) => {
         day: "numeric",
     }).format(posttime));
 };
-//-------------------------- SOCKET boilerplate ------------------------------
-
-// app.get("/", function (req, res) {
-//     // just a normal route
-//     res.sendStatus(200);
-// });
-
-// io.on("connection", function (socket) {
-//     console.log(`socket with the id ${socket.id} is now connected`);
-
-//     socket.on("disconnect", function () {
-//         console.log(`socket with the id ${socket.id} is now disconnected`);
-//     });
-
-//     socket.on("thanks", function (data) {
-//         console.log(data);
-//     });
-
-//     socket.emit("welcome", {
-//         message: "Welome. It is nice to see you",
-//     });
-// });
-//----------------------------------------------------------------------------------
 
 //------------------------------------------------------------------
 //--------------------- MIDDLEWARE ---------------------------------
@@ -161,7 +139,6 @@ app.post("/login", (req, res) => {
     } else {
         db.getUserByEmail(req.body.email)
             .then((results) => {
-                console.log("results from db in POST login", results);
                 const hashedPw = results.rows[0].password;
                 compare(req.body.password, hashedPw).then((matchValue) => {
                     if (matchValue) {
@@ -293,7 +270,6 @@ app.get("/api/user/:id", (req, res) => {
     } else {
         db.areWeFriends(req.session.userId, req.params.id)
             .then((results) => {
-                console.log("results in AREWEFRIENDS", results.rows);
                 var friendshipstatus = {};
                 if (results.rows.length > 0) {
                     friendshipstatus.friendship = true;
@@ -303,27 +279,17 @@ app.get("/api/user/:id", (req, res) => {
                 db.getUsersFriends(req.params.id)
                     .then(({ rows }) => {
                         var userFriends = {};
-                        console.log("results in GETUSERFRIENDS", rows);
                         if (rows.length < 1) {
                             userFriends = {};
                         } else {
                             userFriends = { friends: rows };
-                            console.log(
-                                "userfriends if FRIENDSSS",
-                                userFriends
-                            );
                         }
 
                         db.getFaveMovies(req.params.id)
                             .then((results) => {
-                                console.log(
-                                    "results in getFAVE moovies",
-                                    results.rows
-                                );
                                 var faveMovies = { faves: results.rows };
                                 db.getUserById(req.params.id)
                                     .then((results) => {
-                                        // console.log("results.rows[0]", results.rows[0]);
                                         res.json({
                                             ...faveMovies,
                                             ...userFriends,
@@ -357,7 +323,6 @@ app.get("/api/user/:id", (req, res) => {
 app.get("/api/users", (req, res) => {
     db.topThree()
         .then((results) => {
-            console.log("results.rows from top3", results.rows);
             res.json(results.rows);
         })
         .catch((err) => {
@@ -366,10 +331,8 @@ app.get("/api/users", (req, res) => {
 });
 
 app.get("/api/users/:users", (req, res) => {
-    console.log("req.params.users", req.params.users);
     db.getMatch(req.params.users)
         .then((results) => {
-            console.log("results.rows from getmacth", results.rows);
             res.json(results.rows);
         })
         .catch((err) => {
@@ -442,7 +405,6 @@ app.post("/send-friend-request/:otheruserId/:buttonText", (req, res) => {
 app.get("/friends-wannabes", (req, res) => {
     db.getAllFriendlies(req.session.userId)
         .then((results) => {
-            // console.log("results.rows in getfriendlies: ", results.rows);
             res.json(results.rows);
         })
         .catch((err) => {
@@ -478,7 +440,6 @@ app.post("/endFriendship", (req, res) => {
 //================================= MOVIES =======================================
 
 app.get("/api/movies/:movieId", (req, res) => {
-    console.log("req param MOVIE", req.params);
     db.getMovieLikes(req.params.movieId)
         .then((results) => {
             console.log("getMovieLikes:", results.rows);
@@ -493,7 +454,6 @@ app.get("/faveMovies/:userId", (req, res) => {
     console.log("req params in faveMovies", req.params);
     db.getFaveMovies(req.params.userId)
         .then((results) => {
-            console.log("results in getFAVE moovies", results.rows);
             var faveMovies = { faves: results.rows };
             res.json({ ...faveMovies });
         })
@@ -505,7 +465,6 @@ app.get("/faveMovies/:userId", (req, res) => {
 app.get("/movieRelationship/:userId/:movieId", (req, res) => {
     db.getMovieRealtionship(req.params.movieId, req.params.userId)
         .then((results) => {
-            console.log("results in getMovieRELATIONSHIP", results);
             if (results.rowCount == 0) {
                 res.json({ buttonText: "add to favorites" });
             } else {
@@ -566,10 +525,6 @@ server.listen(8080, function () {
 });
 
 // ================== SOCKET =============================
-let onlineUsers = {
-    // [userId]: socketId,
-};
-
 io.on("connection", function (socket) {
     console.log(`socket with id ${socket.id} is now connected`);
 
@@ -588,7 +543,6 @@ io.on("connection", function (socket) {
 
     // //OR
 
-    console.log("ONLINE USERS", onlineUsers);
     // function getUsersById(arrayOfIds) {
     //     const query = `
     //     SELECT id, first, last, pic
@@ -603,7 +557,6 @@ io.on("connection", function (socket) {
 
     db.getLastTenMessages()
         .then((results) => {
-            // console.log("results in getlast10", results.rows);
             for (let i = 0; i < results.rows.length; i++) {
                 results.rows[i].created_at = prettierDate(
                     results.rows[i].created_at
