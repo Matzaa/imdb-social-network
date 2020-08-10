@@ -19,13 +19,10 @@ export const init = (store) => {
             store.dispatch(chatMessages(msgs));
         });
 
-        // socket.on("chatMessage", (msg) => store.dispatch(chatMessage(msg)));
-
         socket.on("addChatMsg", (msg) => {
             console.log(
                 `message in clientInformation, about to start the redux process by dispatching here ${msg}`
             );
-            console.log("msg msg msg: ", msg);
             store.dispatch(chatMessage(msg));
         });
 

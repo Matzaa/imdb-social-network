@@ -11,8 +11,6 @@ export default class ResetPassword extends React.Component {
     }
 
     handleChange(e) {
-        console.log("e.target.value", e.target.value);
-        console.log("e.target.name", e.target.name);
         this.setState(
             {
                 [e.target.name]: e.target.value,
@@ -22,10 +20,8 @@ export default class ResetPassword extends React.Component {
     }
 
     submitReset() {
-        console.log("about to submit reset");
         axios.post("/password/reset/start", this.state).then(({ data }) => {
             if (data.success) {
-                console.log("resp in POST reset ", data);
                 this.setState({ step: 2 });
             } else {
                 this.setState({ error: true });
@@ -36,7 +32,6 @@ export default class ResetPassword extends React.Component {
     submitNew() {
         axios.post("/password/reset/verify", this.state).then(({ data }) => {
             if (data.success) {
-                console.log("resp in POST verify ", data);
                 this.setState({ step: 3 });
             } else {
                 this.setState({ error: true });
@@ -45,22 +40,6 @@ export default class ResetPassword extends React.Component {
     }
 
     render() {
-        // if (this.state.step == 1) {
-        //     return (
-        //         <div>
-        //             <input name="email"></input>
-        //             <button></button>
-        //         </div>
-        //     );
-        // } else if (this.state.step == 2) {
-        //     return (
-        //         <div>
-        //             <input name="code"></input>
-        //             <input name="pass"></input>
-        //             <button></button>
-        //         </div>
-        //     );
-        // }
         return (
             <div>
                 {this.state.step == 1 && (

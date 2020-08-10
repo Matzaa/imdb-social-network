@@ -7,7 +7,6 @@ export default function MovieButton({ userId, movieId }) {
 
     useEffect(() => {
         let abort;
-        console.log("im movie button compo mounting");
         axios
             .get(`/movieRelationship/${userId}/${movieId}`)
             .then(({ data }) => {
@@ -22,7 +21,6 @@ export default function MovieButton({ userId, movieId }) {
     }, []);
 
     function like() {
-        console.log("I clicked the button and text is", buttonText);
         axios
             .post(`/like`, {
                 buttonText: buttonText,

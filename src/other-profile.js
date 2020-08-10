@@ -16,22 +16,13 @@ export default class OtherProfile extends React.Component {
     }
 
     componentDidMount() {
-        console.log("this.state before axios", this.state);
-
-        console.log("this.props", this.props);
         const otheruserId = this.props.match.params.id;
         axios.get("/api/user/" + otheruserId, this.state).then(({ data }) => {
-            console.log("data in axios mount", data);
             if (data.usersOwnProfile) {
                 this.props.history.push("/");
             } else {
                 this.setState(data);
-                console.log(
-                    "this.state after axios in OTHERPROFILE",
-                    this.state
-                );
                 for (var i = 0; i < this.state.faves.length; i++) {
-                    console.log("MOVIE LOOP", this.state.faves[i].movie_id);
                     fetch(
                         `http://www.omdbapi.com/?i=${this.state.faves[i].movie_id}&apikey=27336ed8`
                     )

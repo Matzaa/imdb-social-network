@@ -15,9 +15,7 @@ export default function MovieWall({ userId, movieId }) {
     const keyCheck = (e) => {
         if (e.key === "Enter") {
             e.preventDefault(); //prevents going to the next line
-            console.log("value ", e.target.value);
             let infoToEmit = { post: e.target.value, movieId };
-            console.log("object that will be emitted", infoToEmit);
             socket.emit("post to movie wall", infoToEmit);
             e.target.value = "";
         }

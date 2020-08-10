@@ -16,7 +16,6 @@ export default class Movies extends React.Component {
     }
 
     componentDidMount() {
-        console.log("movies mounted");
         const movieId = this.props.match.params.movieId;
         fetch(`http://www.omdbapi.com/?i=${movieId}&apikey=27336ed8`)
             .then((res) => res.json())
@@ -27,7 +26,6 @@ export default class Movies extends React.Component {
                         movieitems: result,
                     });
                     axios.get("/api/movies/" + movieId).then((data) => {
-                        console.log("data in GET MOVIE", data);
                         this.setState(data);
                     });
                 },
@@ -42,8 +40,6 @@ export default class Movies extends React.Component {
     }
 
     render() {
-        console.log("THIS STATE!", this.state);
-        console.log("THIS PROPS!", this.props);
         const { movieerror, movieisLoaded, movieitems } = this.state;
         return (
             <div id="movie">

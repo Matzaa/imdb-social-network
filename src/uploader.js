@@ -14,12 +14,9 @@ export default class Uploader extends React.Component {
     methodInUploader() {
         var formData = new FormData();
         formData.append("file", this.state.file);
-        console.log("file", this.state.file);
-        console.log("formdata", formData);
         axios
             .post("/upload", formData)
             .then(({ data }) => {
-                console.log("data.file in post upload", data.file);
                 this.props.methodInApp(data.file);
                 this.props.toggleModal();
             })
@@ -29,9 +26,6 @@ export default class Uploader extends React.Component {
     }
 
     handleChange(e) {
-        console.log("e.target.value & name", e.target.value);
-        console.log("e.target.name", e.target.name);
-        console.log("e.target.files", e.target.files);
         this.setState(
             {
                 file: e.target.files[0],

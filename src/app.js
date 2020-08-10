@@ -19,10 +19,8 @@ export default class App extends React.Component {
 
     componentDidMount() {
         console.log("App mounted");
-        // console.log("this.state before get", this.state);
         axios.get("/user", this.state).then(({ data }) => {
             this.setState(data);
-            // console.log("this.state after get", this.state);
         });
     }
 

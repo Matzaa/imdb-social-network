@@ -10,8 +10,6 @@ export default class Registration extends React.Component {
     }
 
     handleChange(e) {
-        console.log("e.target.value & name", e.target.value);
-        console.log("e.target.name", e.target.name);
         this.setState(
             {
                 [e.target.name]: e.target.value,
@@ -21,7 +19,6 @@ export default class Registration extends React.Component {
     }
 
     submit() {
-        console.log("about to sumit", this.state);
         axios.post("/register", this.state).then(({ data }) => {
             console.log("reponse:", data);
             if (data.success) {

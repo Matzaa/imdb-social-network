@@ -15,20 +15,10 @@ const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(reduxPromise))
 );
-// ================================================================
-// const socket = io.connect();
-
-// socket.on("welcome", function (data) {
-//     console.log(data);
-//     socket.emit("thanks", {
-//         message: "Thank you. It is great to be here.",
-//     });
-// });
 
 let elem;
 const userIsLoggedIn = location.pathname != "/welcome";
 
-console.log("startpage");
 if (userIsLoggedIn) {
     init(store);
     elem = (
@@ -41,13 +31,3 @@ if (userIsLoggedIn) {
 }
 
 ReactDOM.render(elem, document.querySelector("main"));
-
-// import axios from "./axios"
-// import {useStatefulFields, useAuthSubmit} from "./hooks"
-
-// ReactDOM.render(
-//     <>
-//     <Login/>
-//     <Register/>
-//     </>
-// )

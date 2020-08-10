@@ -57,13 +57,6 @@ const prettierDate = (posttime) => {
 //------------------------------------------------------------------
 app.use(compression());
 
-// app.use(
-//     cookieSession({
-//         secret: `I'm always angry.`,
-//         maxAge: 1000 * 60 * 60 * 24 * 14,
-//     })
-// );
-
 const cookieSessionMiddleware = cookieSession({
     secret: `I'm always angry.`,
     maxAge: 1000 * 60 * 60 * 24 * 90,
@@ -102,7 +95,6 @@ if (process.env.NODE_ENV != "production") {
 
 //========================= START ================================
 app.post("/register", (req, res) => {
-    console.log("req.body in post register", req.body);
     if (
         !req.body.first ||
         !req.body.last ||
@@ -114,8 +106,6 @@ app.post("/register", (req, res) => {
         hash(req.body.password).then((hashedPw) => {
             db.addData(req.body.first, req.body.last, req.body.email, hashedPw)
                 .then((response) => {
-                    console.log("response from addData", response);
-
                     req.session = {
                         first: response.rows[0].first,
                         last: response.rows[0].last,
@@ -133,7 +123,6 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    console.log("req.body in post login", req.body);
     if (!req.body.email || !req.body.password) {
         res.json({ success: false });
     } else {
@@ -150,7 +139,6 @@ app.post("/login", (req, res) => {
                             imageUrl: results.rows[0].profile_pic,
                             bio: results.rows[0].bio,
                         };
-                        console.log("POST login  req.session", req.session);
                         res.json({ success: true });
                     } else {
                         res.json({ success: false });
@@ -179,7 +167,6 @@ app.get("/user", (req, res) => {
 //========================= PW RESET ================================
 
 app.post("/password/reset/start", (req, res) => {
-    console.log("reset post req.body", req.body);
     let email = req.body.email;
     db.getUserByEmail(email)
         .then((results) => {
@@ -206,11 +193,9 @@ app.post("/password/reset/start", (req, res) => {
 });
 
 app.post("/password/reset/verify", (req, res) => {
-    console.log("reset verify post req.body", req.body);
     let email = req.body.email;
     let code = req.body.code;
     db.getCode(email).then((results) => {
-        console.log("results of getCode", results);
         if (results.rows.length < 1) {
             res.json({ error: true });
         } else {
@@ -220,7 +205,6 @@ app.post("/password/reset/verify", (req, res) => {
                     .then((hashedPw) => {
                         db.updatePassword(email, hashedPw)
                             .then(() => {
-                                console.log("password updated!");
                                 res.json({ success: true });
                             })
                             .catch((err) => {
@@ -240,8 +224,6 @@ app.post("/password/reset/verify", (req, res) => {
 //========================= UPLOAD BIO, PROFILEPIC ================================
 
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
-    console.log("req.file in upload", req.file); //file we just uploaded
-    console.log("input in upload", req.body); //input fields from the client
     let url = config.s3Url + req.file.filename;
     db.updateImage(url, req.session.userId)
         .then((results) => {
@@ -345,7 +327,6 @@ app.get("/api/users/:users", (req, res) => {
 app.get("/friendshipstatus/:otheruserId", (req, res) => {
     db.getFriendship(req.session.userId, req.params.otheruserId)
         .then((results) => {
-            console.log("results.rows in getfriendship", results.rows);
             if (results.rows == 0) {
                 res.json({ buttonText: "send friend request :)" });
             } else if (results.rows[0].accepted) {
@@ -364,7 +345,6 @@ app.get("/friendshipstatus/:otheruserId", (req, res) => {
 });
 
 app.post("/send-friend-request/:otheruserId/:buttonText", (req, res) => {
-    console.log("req.params: ", req.params);
     if (req.params.buttonText == "send friend request :)") {
         return db
             .sendRequest(req.session.userId, req.params.otheruserId)
@@ -413,7 +393,6 @@ app.get("/friends-wannabes", (req, res) => {
 });
 
 app.post("/acceptFriendRequest", (req, res) => {
-    console.log("req.body in accept friendrequest", req.body);
     return db
         .acceptRequest(req.session.userId, req.body.otherUserId)
         .then((results) => {
@@ -426,7 +405,6 @@ app.post("/acceptFriendRequest", (req, res) => {
 });
 
 app.post("/endFriendship", (req, res) => {
-    console.log("req.body in accept endfriendship", req.body);
     db.deleteFriendship(req.session.userId, req.body.otherUserId)
         .then((results) => {
             console.log("friendship deleted");
@@ -451,7 +429,6 @@ app.get("/api/movies/:movieId", (req, res) => {
 });
 
 app.get("/faveMovies/:userId", (req, res) => {
-    console.log("req params in faveMovies", req.params);
     db.getFaveMovies(req.params.userId)
         .then((results) => {
             var faveMovies = { faves: results.rows };
@@ -477,7 +454,6 @@ app.get("/movieRelationship/:userId/:movieId", (req, res) => {
 });
 
 app.post("/like", (req, res) => {
-    console.log("req body in LIKE", req.body);
     if (req.body.buttonText == "add to favorites") {
         db.likeMovie(req.body.movieId, req.body.userId)
             .then(() => {
@@ -497,9 +473,7 @@ app.post("/like", (req, res) => {
     }
 });
 app.get("/populars", (req, res) => {
-    console.log("POP MOVS HIT");
     db.getPopulars().then((results) => {
-        console.log("results in GET POPS", results.rows);
         res.json({ populars: results.rows });
     });
 });
@@ -507,7 +481,6 @@ app.get("/populars", (req, res) => {
 //===============================================================================
 
 app.get("/logout", (req, res) => {
-    console.log("logout route hit");
     req.session = null;
     res.redirect("/");
 });
@@ -535,26 +508,6 @@ io.on("connection", function (socket) {
 
     const userId = socket.request.session.userId;
 
-    // LIST OF USERS ONLINE
-    // let onlineUsers = [
-    //     { id: 1, socketId: "dsadjdl" },
-    //     { id: 2, socketId: "mowppp" },
-    // ];
-
-    // //OR
-
-    // function getUsersById(arrayOfIds) {
-    //     const query = `
-    //     SELECT id, first, last, pic
-    //     FROM users
-    //     WHERE id = ANY($1)
-    //     `;
-    //     return db.query(query, [arrayOfIds]);
-    // }
-    // socket.on("disconnect", function () {
-    //     //remove thtat one user from array
-    // });
-
     db.getLastTenMessages()
         .then((results) => {
             for (let i = 0; i < results.rows.length; i++) {
@@ -575,7 +528,6 @@ io.on("connection", function (socket) {
                     results.rows[i].created_at
                 );
             }
-            // console.log("results.rows in getWall", results.rows);
             io.sockets.emit("posts", results.rows);
         })
         .catch((err) => {
@@ -596,12 +548,8 @@ io.on("connection", function (socket) {
         });
 
     socket.on("My amazing chat message", (newMsg) => {
-        // console.log("this message is coming from chat.js: ", newMsg);
-        // console.log("user who sent new message ", userId);
-
         db.addChat(newMsg, userId)
             .then((addChatResults) => {
-                // console.log("results from addchat: ", addChatResults.rows[0]);
                 for (let i = 0; i < addChatResults.rows.length; i++) {
                     addChatResults.rows[i].created_at = prettierDate(
                         addChatResults.rows[i].created_at
@@ -609,10 +557,6 @@ io.on("connection", function (socket) {
                 }
                 db.getLastChatter(userId)
                     .then((results) => {
-                        console.log(
-                            "results from getLastChatter: ",
-                            results.rows[0]
-                        );
                         let newMessageObj = {
                             ...addChatResults.rows[0],
                             ...results.rows[0],
@@ -630,7 +574,6 @@ io.on("connection", function (socket) {
     });
 
     socket.on("post to wall", (info) => {
-        console.log("info  POSTTOWALL", info);
         let wallOwner;
         if (!info.otheruserId) {
             wallOwner = userId;
@@ -644,7 +587,6 @@ io.on("connection", function (socket) {
                         postInfoFromWall.rows[i].created_at
                     );
                 }
-                // console.log("results.rows aADD POST", postInfoFromWall.rows);
                 db.userInfoForWall(userId)
                     .then((results) => {
                         let newPost = {
@@ -663,10 +605,8 @@ io.on("connection", function (socket) {
     });
 
     socket.on("post to movie wall", (info) => {
-        console.log("info in POST TO MOVIE W", info);
         db.addMovieComment(info.post, info.movieId, userId)
             .then((moviePostInfo) => {
-                console.log("results in add movie comment", moviePostInfo);
                 for (let i = 0; i < moviePostInfo.rows.length; i++) {
                     moviePostInfo.rows[i].created_at = prettierDate(
                         moviePostInfo.rows[i].created_at

@@ -37,16 +37,6 @@ export default class Login extends React.Component {
         });
     }
 
-    // keyCheck(e) {
-    //     if (e.key === "Enter") {
-    //         e.preventDefault(); //prevents going to the next line
-    //         {
-    //             () => this.submit();
-    //         }
-    //     }
-    //     return;
-    // }
-
     render() {
         return (
             <div id="login">
@@ -64,7 +54,6 @@ export default class Login extends React.Component {
                     placeholder="password"
                     type="password"
                     onChange={(e) => this.handleChange(e)}
-                    // onKeyDown={this.keyCheck}
                 />
 
                 <button onClick={() => this.submit()}>Login</button>

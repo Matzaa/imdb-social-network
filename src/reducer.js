@@ -4,9 +4,6 @@ export default function reducer(state = {}, action) {
             ...state,
             friendsWannabes: action.friendsWannabes,
         };
-        //     state = Object.assign({}, state, {
-        //         friendsWannabes: action.friendsWannabes,
-        //     });
     }
 
     if (action.type === "ACCEPT_REQUEST") {

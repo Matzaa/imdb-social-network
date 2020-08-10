@@ -14,22 +14,11 @@ export default function Wall({ userId, otheruserId }) {
     const keyCheck = (e) => {
         if (e.key === "Enter") {
             e.preventDefault(); //prevents going to the next line
-            console.log("value ", e.target.value);
             let infoToEmit = { post: e.target.value, otheruserId };
-            console.log("object that will be emitted", infoToEmit);
             socket.emit("post to wall", infoToEmit);
             e.target.value = "";
         }
     };
-
-    // async function loadPage() {
-    //     const searchUrl = "https://www.amazon.de/";
-    //     const response = await fetch(searchUrl);
-    //     const htmlString = await response.text();
-    //     console.log("htmlString in loadpage", htmlString);
-    // }
-
-    // loadPage();
 
     return (
         <div className="wall">

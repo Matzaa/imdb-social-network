@@ -18,12 +18,8 @@ export default class Profile extends React.Component {
     }
 
     componentDidMount() {
-        console.log("profile compo loaded");
-        console.log("this.props in Mount", this.props);
         axios.get("/faveMovies/" + this.props.userId).then(({ data }) => {
-            console.log("data in faveMovies", data);
             this.setState(data);
-            console.log("this.state after axios in OTHERPROFILE", this.state);
             for (var i = 0; i < this.state.faves.length; i++) {
                 console.log("MOVIE LOOP", this.state.faves[i].movie_id);
                 fetch(
@@ -37,8 +33,6 @@ export default class Profile extends React.Component {
 
                                 posters: [...this.state.posters, result],
                             });
-                            console.log("FETCH RESULT", result);
-                            console.log("StaTE after FETCH", this.state);
                         },
                         (error) => {
                             this.setState({

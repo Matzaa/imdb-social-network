@@ -16,13 +16,10 @@ export default class Movie extends React.Component {
     }
 
     componentDidMount() {
-        console.log("movie-search mounted PROPS", this.props);
         axios
             .get("/populars")
             .then(({ data }) => {
-                console.log("data in most popular movies", data);
                 for (var i = 0; i < data.populars.length; i++) {
-                    // console.log("MOVIE LOOP", data.populars[i].movie_id);
                     fetch(
                         `http://www.omdbapi.com/?i=${data.populars[i].movie_id}&apikey=27336ed8`
                     )
@@ -34,7 +31,6 @@ export default class Movie extends React.Component {
 
                                     posters: [...this.state.posters, result],
                                 });
-                                // console.log("FETCH RESULT", result);
                             },
                             (error) => {
                                 this.setState({
@@ -53,19 +49,15 @@ export default class Movie extends React.Component {
     keyCheck(e) {
         if (e.key === "Enter") {
             e.preventDefault();
-            console.log("value ", e.target.value);
-
             fetch(`http://www.omdbapi.com/?t=${e.target.value}&apikey=27336ed8`)
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log("result in MOVIES", result);
                         this.setState({
                             isLoaded: true,
                             items: result,
                         });
                         this.setState({ showPops: false });
-                        console.log("THIS HISTORY", this.props.history);
                         this.props.history.push("/movies/" + result.imdbID);
                     },
                     (error) => {

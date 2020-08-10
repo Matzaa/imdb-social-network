@@ -25,9 +25,6 @@ export default function Friends() {
         console.log("what", receiveFriendsWannabes());
     }, []);
 
-    console.log("friends in useSelector: ", friends);
-    console.log("wannabes: ", wannabes);
-
     return (
         <div id="friends">
             <p> MY FRIENDS</p>
